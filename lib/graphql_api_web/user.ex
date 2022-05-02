@@ -37,4 +37,45 @@ defmodule GraphqlApiWeb.User do
       }
     }
   ]
+
+  def find_user(%{id: id}) do
+    case Enum.find(@users, &(&1.id === id)) do
+      nil -> {:error, %{message: "User not found", details: %{id: id}}}
+      user -> {:ok, user}
+    end
+  end
+
+  def find_users(%{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}) do
+    case Enum.filter(@users, &(&1.preferences.likes_emails === likes_emails && &1.preferences.likes_phone_calls === likes_phone_calls)) do
+      [] -> {:error, %{message: "Users not found", details: %{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}}}
+      users -> {:ok, users}
+    end
+  end
+
+  def find_users(%{likes_emails: likes_emails}) do
+    case Enum.filter(@users, &(&1.preferences.likes_emails === likes_emails)) do
+      [] -> {:error, %{message: "Users not found", details: %{likes_emails: likes_emails}}}
+      users -> {:ok, users}
+    end
+  end
+
+  def find_users(%{likes_phone_calls: likes_phone_calls}) do
+    case Enum.filter(@users, &(&1.preferences.likes_phone_calls === likes_phone_calls)) do
+      [] -> {:error, %{message: "Users not found", details: %{likes_phone_calls: likes_phone_calls}}}
+      users -> {:ok, users}
+    end
+  end
+
+  def find_users(_), do: {:ok, @users}
+
+
+
+  # # reference -------------------------------------------------------------
+  # def update(id, params) do
+  #   with {:ok, shop} <- find(%{id: id}) do
+  #     {:ok, Map.merge(shop, params)}
+  #   end
+  # end
+
+
 end
