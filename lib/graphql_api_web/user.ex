@@ -69,7 +69,30 @@ defmodule GraphqlApiWeb.User do
   def find_users(_), do: {:ok, @users}
 
   def create_user(params) do
-    {:ok, [params | @users]}
+    case find_user(%{id: params.id}) do
+      {:ok, _user} -> {:error, %{message: "ID is already assigned to existing user", details: %{id: params.id}}}
+      _ -> {:ok, [params | @users]}
+    end
+  end
+
+  def update_user(id, params) do
+    with {:ok, user} <- find_user(%{id: id}) do
+      {:ok, Map.merge(user, params)}
+    end
+  end
+
+  def update_user_preferences(id, %{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}) do
+    with {:ok, user} <- find_user(%{id: id}) do
+      new_preferences = %{preferences: %{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}}
+      {:ok, Map.merge(user, new_preferences)}
+    end
+  end
+
+  def update_user_preferences(id, %{likes_emails: likes_emails}) do
+    with {:ok, user} <- find_user(%{id: id}) do
+      new_preferences = %{preferences: Map.put(user.preferences, :likes_emails, likes_emails)}
+      {:ok, Map.merge(user, new_preferences)}
+    end
   end
 
 

@@ -12,6 +12,16 @@ defmodule GraphqlApiWeb.Resolvers.User do
     id = String.to_integer(id)
     User.create_user(Map.put(params, :id, id))
   end
+
+  def update_user(%{id: id} = params, _) do
+    id = String.to_integer(id)
+    User.update_user(id, Map.delete(params, :id))
+  end
+
+  def update_user_preferences(%{id: id} = params, _) do
+    id = String.to_integer(id)
+    User.update_user_preferences(id, Map.delete(params, :id))
+  end
 end
 
 
