@@ -3,8 +3,8 @@ defmodule GraphqlApiWeb.Types.User do
 
   @desc "Alows user_preferences to be a nested argument in our mutations"
   input_object :preferences do
-    field :likes_emails, :boolean
-    field :likes_phone_calls, :boolean
+    field :likes_emails, non_null(:boolean)
+    field :likes_phone_calls, non_null(:boolean)
   end
 
   @desc "The preferences a user can have for communication"
