@@ -71,7 +71,7 @@ defmodule GraphqlApiWeb.User do
   def create_user(params) do
     case find_user(%{id: params.id}) do
       {:ok, _user} -> {:error, %{message: "ID is already assigned to existing user", details: %{id: params.id}}}
-      _ -> {:ok, [params | @users]}
+      _ -> {:ok, params}
     end
   end
 
@@ -94,15 +94,4 @@ defmodule GraphqlApiWeb.User do
       {:ok, Map.merge(user, new_preferences)}
     end
   end
-
-
-
-  # # reference -------------------------------------------------------------
-  # def update(id, params) do
-  #   with {:ok, shop} <- find(%{id: id}) do
-  #     {:ok, Map.merge(shop, params)}
-  #   end
-  # end
-
-
 end
