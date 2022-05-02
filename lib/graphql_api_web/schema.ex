@@ -4,9 +4,14 @@ defmodule GraphqlApiWeb.Schema do
   import_types GraphqlApiWeb.Types.User
 
   import_types GraphqlApiWeb.Schema.Queries.User
+  import_types GraphqlApiWeb.Schema.Mutations.User
 
   query do
     import_fields :user_queries
+  end
+
+  mutation do
+    import_fields :user_mutations
   end
 end
 

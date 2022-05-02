@@ -68,6 +68,10 @@ defmodule GraphqlApiWeb.User do
 
   def find_users(_), do: {:ok, @users}
 
+  def create_user(params) do
+    {:ok, [params | @users]}
+  end
+
 
 
   # # reference -------------------------------------------------------------

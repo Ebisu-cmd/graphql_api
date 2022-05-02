@@ -7,6 +7,11 @@ defmodule GraphqlApiWeb.Resolvers.User do
   end
 
   def find_users(params, _), do: User.find_users(params)
+
+  def create_user(%{id: id} = params, _) do
+    id = String.to_integer(id)
+    User.create_user(Map.put(params, :id, id))
+  end
 end
 
 

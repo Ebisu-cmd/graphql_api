@@ -10,7 +10,7 @@ defmodule GraphqlApiWeb.Schema.Queries.User do
       resolve &Resolvers.User.find_user/2
     end
 
-    field :users, list_of(:users) do
+    field :users, list_of(:user) do
       arg :likes_emails, :boolean
       arg :likes_phone_calls, :boolean
 
