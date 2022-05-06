@@ -6,7 +6,8 @@ defmodule GraphqlApiWeb.User do
       email: "bill@gmail.com",
       preferences: %{
         likes_emails: false,
-        likes_phone_calls: true
+        likes_phone_calls: true,
+        likes_faxes: true
       }
     },
     %{
@@ -15,7 +16,8 @@ defmodule GraphqlApiWeb.User do
       email: "alice@gmail.com",
       preferences: %{
         likes_emails: true,
-        likes_phone_calls: false
+        likes_phone_calls: false,
+        likes_faxes: true
       }
     },
     %{
@@ -24,7 +26,8 @@ defmodule GraphqlApiWeb.User do
       email: "jill@hotmail.com",
       preferences: %{
         likes_emails: true,
-        likes_phone_calls: true
+        likes_phone_calls: true,
+        likes_faxes: false
       }
     },
     %{
@@ -33,7 +36,8 @@ defmodule GraphqlApiWeb.User do
       email: "tim@gmail.com",
       preferences: %{
         likes_emails: false,
-        likes_phone_calls: false
+        likes_phone_calls: false,
+        likes_faxes: false
       }
     }
   ]
