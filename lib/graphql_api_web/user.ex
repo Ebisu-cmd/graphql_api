@@ -49,28 +49,44 @@ defmodule GraphqlApiWeb.User do
     end
   end
 
-  def find_users(%{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}) do
-    case Enum.filter(@users, &(&1.preferences.likes_emails === likes_emails && &1.preferences.likes_phone_calls === likes_phone_calls)) do
-      [] -> {:error, %{message: "Users not found", details: %{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}}}
-      users -> {:ok, users}
+  def find_users(params) do
+    @users
+    |> filter_users_who_like_emails(params)
+    |> filter_users_who_like_phone_calls(params)
+    |> filter_users_who_like_faxes(params)
+    |> find_users_error_check(params)
+  end
+
+  defp filter_users_who_like_emails(users, params) do
+    if Map.has_key?(params, :likes_emails) do
+      Enum.filter(users, &(&1.preferences.likes_emails === params.likes_emails))
+    else
+      users
     end
   end
 
-  def find_users(%{likes_emails: likes_emails}) do
-    case Enum.filter(@users, &(&1.preferences.likes_emails === likes_emails)) do
-      [] -> {:error, %{message: "Users not found", details: %{likes_emails: likes_emails}}}
-      users -> {:ok, users}
+  defp filter_users_who_like_phone_calls(users, params) do
+    if Map.has_key?(params, :likes_phone_calls) do
+      Enum.filter(users, &(&1.preferences.likes_phone_calls === params.likes_phone_calls))
+    else
+      users
     end
   end
 
-  def find_users(%{likes_phone_calls: likes_phone_calls}) do
-    case Enum.filter(@users, &(&1.preferences.likes_phone_calls === likes_phone_calls)) do
-      [] -> {:error, %{message: "Users not found", details: %{likes_phone_calls: likes_phone_calls}}}
-      users -> {:ok, users}
+  defp filter_users_who_like_faxes(users, params) do
+    if Map.has_key?(params, :likes_faxes) do
+      Enum.filter(users, &(&1.preferences.likes_faxes === params.likes_faxes))
+    else
+      users
     end
   end
 
-  def find_users(_), do: {:ok, @users}
+  defp find_users_error_check(users, params) do
+    case users do
+      [] -> {:error, %{message: "Users not found", details: params}}
+      users -> {:ok, users}
+    end
+  end
 
   def create_user(params) do
     case find_user(%{id: params.id}) do
@@ -85,17 +101,40 @@ defmodule GraphqlApiWeb.User do
     end
   end
 
-  def update_user_preferences(id, %{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}) do
+  def update_user_preferences(id, params) do
     with {:ok, user} <- find_user(%{id: id}) do
-      new_preferences = %{preferences: %{likes_emails: likes_emails, likes_phone_calls: likes_phone_calls}}
-      {:ok, Map.merge(user, new_preferences)}
+      user.preferences
+      |> update_users_email_preference(params)
+      |> update_users_phone_preference(params)
+      |> update_users_fax_preference(params)
+      |> add_user_id_for_subscription(user)
     end
   end
 
-  def update_user_preferences(id, %{likes_emails: likes_emails}) do
-    with {:ok, user} <- find_user(%{id: id}) do
-      new_preferences = %{preferences: Map.put(user.preferences, :likes_emails, likes_emails)}
-      {:ok, Map.merge(user, new_preferences)}
+  defp update_users_email_preference(user_preferences, params) do
+    %{likes_emails: likes_emails} = params
+    Map.merge(user_preferences, %{likes_emails: likes_emails})
+  end
+
+  defp update_users_phone_preference(user_preferences, params) do
+    if Map.has_key?(params, :likes_phone_calls) do
+      %{likes_phone_calls: likes_phone_calls} = params
+      Map.merge(user_preferences, %{likes_phone_calls: likes_phone_calls})
+    else
+      user_preferences
     end
+  end
+
+  defp update_users_fax_preference(user_preferences, params) do
+    if Map.has_key?(params, :likes_faxes) do
+      %{likes_faxes: likes_faxes} = params
+      Map.merge(user_preferences, %{likes_faxes: likes_faxes})
+    else
+      user_preferences
+    end
+  end
+
+  defp add_user_id_for_subscription(user_preferences, user) do
+    {:ok ,Map.merge(user_preferences, %{user_id: user.id})}
   end
 end
