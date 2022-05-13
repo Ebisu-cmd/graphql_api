@@ -74,11 +74,10 @@ defmodule GraphqlApiWeb.User do
   end
 
   def update_user_preferences(id, params) do
+    IO.inspect(params)
     with {:ok, user} <- find_user(%{id: id}) do
-      new_user_preferences = Enum.reduce(params, user.preferences, fn {preference, value}, acc ->
-        Map.put(acc, preference, value)
-      end)
-      {:ok, Map.put(new_user_preferences, :user_id, user.id)}
+      updated_preferences = Map.merge(user.preferences, params)
+      {:ok, Map.put(updated_preferences, :user_id, id)}
     end
   end
 end
