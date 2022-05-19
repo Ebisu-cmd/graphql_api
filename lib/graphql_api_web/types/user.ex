@@ -2,7 +2,7 @@ defmodule GraphqlApiWeb.Types.User do
   use Absinthe.Schema.Notation
 
   @desc "Alows user_preferences to be a nested argument in our mutations"
-  input_object :preferences do
+  input_object :user_preferences_input do
     field :likes_emails, non_null(:boolean)
     field :likes_phone_calls, non_null(:boolean)
     field :likes_faxes, non_null(:boolean)
