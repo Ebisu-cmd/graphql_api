@@ -40,7 +40,11 @@ defmodule GraphqlApi.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:absinthe, "~> 1.7.0"},
       {:absinthe_plug, "~> 1.5.8"},
-      {:absinthe_phoenix, "~> 2.0.2"}
+      {:absinthe_phoenix, "~> 2.0.2"},
+      {:ecto_sql, "~> 3.8"},
+      {:postgrex, "~> 0.16.3"},
+      {:dataloader, "~> 1.0"},
+      {:ecto_shorts, "~> 1.1"}
     ]
   end
 

@@ -1,6 +1,8 @@
 defmodule GraphqlApiWeb.Types.User do
   use Absinthe.Schema.Notation
 
+  import Absinthe.Resolution.Helpers, only: [dataloader: 2]
+
   @desc "Alows user_preferences to be a nested argument in our mutations"
   input_object :user_preferences_input do
     field :likes_emails, non_null(:boolean)
@@ -10,6 +12,7 @@ defmodule GraphqlApiWeb.Types.User do
 
   @desc "The preferences a user can have for communication"
   object :user_preferences do
+    field :id, :id
     field :likes_emails, :boolean
     field :likes_phone_calls, :boolean
     field :likes_faxes, :boolean
@@ -20,6 +23,7 @@ defmodule GraphqlApiWeb.Types.User do
     field :id, :id
     field :name, :string
     field :email, :string
-    field :preferences, :user_preferences
+
+    field :preference, :user_preferences, resolve: dataloader(GraphqlApi.Accounts, :preference)
   end
 end

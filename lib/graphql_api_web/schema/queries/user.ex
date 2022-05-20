@@ -14,6 +14,9 @@ defmodule GraphqlApiWeb.Schema.Queries.User do
       arg :likes_emails, :boolean
       arg :likes_phone_calls, :boolean
       arg :likes_faxes, :boolean
+      arg :first, :integer
+      arg :before, :integer
+      arg :after, :integer
 
       resolve &Resolvers.User.find_users/2
     end
