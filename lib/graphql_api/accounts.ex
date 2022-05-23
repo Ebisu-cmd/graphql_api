@@ -2,6 +2,7 @@ defmodule GraphqlApi.Accounts do
   alias GraphqlApi.Accounts.User
   alias GraphqlApi.Accounts.Preference
   alias EctoShorts.Actions
+  alias GraphqlApi.Repo
 
 
   @user_preferences [:likes_emails, :likes_faxes, :likes_phone_calls]
@@ -37,6 +38,7 @@ defmodule GraphqlApi.Accounts do
 
   def update_user_preferences(id, params) do
     {_, user} = find_user(%{id: id})
+    user = Repo.preload(user, :preference)
     {new_params, _} = Map.merge(user.preference, params) |> Map.split(@user_preferences)
     new_preference = case find_preference(new_params) do
       {:ok, found_existing_preference} -> found_existing_preference

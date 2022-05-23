@@ -22,6 +22,6 @@ defmodule GraphqlApi.Accounts.User do
     |> cast(attrs, @available_fields)
     |> validate_required(@available_fields)
     |> CommonChanges.preload_changeset_assoc(:preference)
-    |> put_assoc(:preference, attrs.preference)
+    |> CommonChanges.put_or_cast_assoc(:preference)
   end
 end
