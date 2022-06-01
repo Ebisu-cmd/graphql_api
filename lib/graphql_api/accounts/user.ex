@@ -8,7 +8,7 @@ defmodule GraphqlApi.Accounts.User do
     field :email, :string
     field :name, :string
 
-    belongs_to :preference, GraphqlApi.Accounts.Preference, on_replace: :nilify
+    belongs_to :preference, GraphqlApi.Accounts.Preference, on_replace: :update
   end
 
   @available_fields [:name, :email]

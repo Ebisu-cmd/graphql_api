@@ -8,6 +8,8 @@ defmodule GraphqlApi.Repo.Migrations.CreateUsers do
       add :preference_id, references(:preferences, on_delete: :nothing)
     end
 
+    create index(:users, [:name])
+    create unique_index(:users, [:email])
     create index(:users, [:preference_id])
   end
 end

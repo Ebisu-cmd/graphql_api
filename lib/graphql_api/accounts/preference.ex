@@ -7,7 +7,7 @@ defmodule GraphqlApi.Accounts.Preference do
     field :likes_faxes, :boolean, default: false
     field :likes_phone_calls, :boolean, default: false
 
-    has_many :users, GraphqlApi.Accounts.User
+    has_one :user, GraphqlApi.Accounts.User
   end
 
   @available_fields [:likes_emails, :likes_phone_calls, :likes_faxes]
